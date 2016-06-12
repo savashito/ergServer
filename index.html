@@ -1,0 +1,13 @@
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost');
+  var clientId = 123;
+  socket.on('clientGretting', function (data) {
+  	console.log('got client greeteing');
+    socket.emit('clientId',clientId);
+    // socket.emit('bbb', { my: 'data' });
+  });
+	socket.on('news', function (data) {
+		console.log(data);
+	});
+</script>
