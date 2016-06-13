@@ -58,8 +58,8 @@ app.get('/', function (req, res) {
   res.sendfile(__dirname + '/index.html');
 });
 
-var clientsIds= {};
-var currentUsers = [];
+var clientsSockets= {};
+var currentUsersIds = [];
 io.on('connection', function (socket) {
 
   socket.emit('boop',{'data':'meow','Muerte':'bark'})
@@ -69,10 +69,10 @@ io.on('connection', function (socket) {
   socket.on('clientId',function(data){
 
   	console.log('got client id '+ data)
-    if(clientsIds[data]===undefined)
-      currentUsers.push(socket);
+    if(clientsSockets[data]===undefined)
+      currentUsersIds.push(data);
 
-  	clientsIds[data] = socket; 
+  	clientsSockets[data] = socket; 
 
   	// currentUser = socket;
 
@@ -83,12 +83,11 @@ io.on('connection', function (socket) {
   });
 */
   socket.on('ergData', function (data) {
-
     console.log(data);
-    console.log(currentUsers.length);
-    for (var i = 0;i<currentUsers.length;i++){
-      var currentUser = currentUsers[i];
-      currentUser.emit('news', data);
+    console.log(currentUsersIds.length);
+    for (var i = 0;i<currentUsersIds.length;i++){
+      var currentUserSocket = clientsSockets[currentUsersIds[i]];
+      currentUserSocket.emit('news', data);
     }
     // currentUser.
   });
