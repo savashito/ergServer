@@ -1,13 +1,13 @@
-(function() {
+const Rower = require("../models/Rower");
+const Workout = require("../models/Workout");
 
-  var WorkoutController = function(){
+class WorkoutController {
+  static getWorkout(rower){
+    if (!(rower instanceof Rower)){
+      throw new TypeError();
+    }
+    return new Workout();
+  }
+}
 
-  };
-
-  WorkoutController.login = function(){
-
-  };
-
-
-  module.exports.WorkoutController = WorkoutController;
-})();
+module.exports = WorkoutController;

@@ -4,7 +4,7 @@ var io = require('socket.io')(server);
 
 var cleanUp = function(){
   console.log("Grafully killing")
-  server.close()  
+  server.close()
 }
 process.on('uncaughtException', cleanUp);
 process.on('SIGTERM', cleanUp);
@@ -22,7 +22,7 @@ var currentUsersIds = [];
 
 io.on('connection', function (socket) {
 
-  socket.on('connectToWorkout',function(rowerJSON){
+  socket.on('connectToWorkout', function(rowerJSON){
     // rowerJSON = socket;
 
 
@@ -34,9 +34,9 @@ io.on('connection', function (socket) {
     // workout = {id=123}
 
     // add the workout if non-existing or get current workout
-    var rower = RowerController.getRower(rowerJSON,socket);
+    var rower = RowerController.getRower(rowerJSON, socket);
 
-    var workout = WorkoutController.getOrCreateWorkout(rower);
+    var workout = WorkoutController.getWorkout(rower);
 
     /*
     if(listCurrentWorkouts[workout.id]==undefined):
@@ -53,10 +53,10 @@ io.on('connection', function (socket) {
     console.log(ergData);
     workout = WorkoutController.getWorkoutFromErg(ergData);
     user = WorkoutController.getUserFromErg(ergData);
-    
+
     // Broadcast to users the info we just got
     workout.broadcastToPeers(user, ergData)
-    
+
     // Save the data to the user
     user.saveData(ergData)
 
@@ -86,7 +86,7 @@ io.on('connection', function (socket) {
     if(clientsSockets[data]===undefined)
       currentUsersIds.push(data);
 
-    clientsSockets[data] = socket; 
+    clientsSockets[data] = socket;
 
     // currentUser = socket;
 

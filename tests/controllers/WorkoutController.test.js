@@ -1,25 +1,22 @@
 const assert = require('assert');
+const expect = require('chai').expect;
+
+const Rower = require('../../src/models/Rower');
+const Workout = require('../../src/models/Workout');
 const WorkoutController = require('../../src/controllers/WorkoutController');
 var MockData = require('../MockData');
 
 describe('WorkoutController',function(){
-	
+	describe('#getWorkout', function() {
+		it('returns an instance of Workout', function () {
+			var rower = new Rower();
+			var workout = WorkoutController.getWorkout(rower);
+			expect(workout).to.be.an.instanceof(Workout);
+		});
+
+		it('raises exception if it an instance of rower is not passed', function(){
+			expect(WorkoutController.getWorkout).to.throw(TypeError);
+		});
+
+	});
 });
-/*
-
-	before(function(){
-		// The before() callback gets run before all tests in the suite. Do one-time setup here.
-	});
-
-	beforeEach(function(){
-		// The beforeEach() callback gets run before each test in the suite.
-	});
-	it('does x when y', function(){
-		// Now... Test!
-		 assert.equal(-1, [1,2,3].indexOf(5));
-		 assert.equal(-1,3);
-	});
-	after(function() {
-		// after() is run after all your tests have completed. Do teardown here.
-	});
-	*/
