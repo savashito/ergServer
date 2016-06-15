@@ -1,56 +1,15 @@
-// var app = require('express')(); // require('express').createServer();
-// var io = require('socket.io')(app);
-
-// var app = require('express')();
-// var server = require('http').Server(app);
-// var io = require('socket.io')(server,port=8000);
-
-
-// app.listen(8000);
-
-// // app.get('/', function (req, res) {
-// //   res.sendfile(__dirname + '/index.html');
-// // });
-
-// io.on('connection', function (socket) {
-//   socket.emit('news', { hello: 'world' });
-//   socket.on('bbb', function (data) {
-//     console.log(data);
-//   });
-// });
-
-// var app = require('express')();
-// var http = require('http').Server(app);
-
-// app.get('/', function(req, res){
-//   res.send('<h1>Hello world</h1>');
-// });
-
-// http.listen(3000, function(){
-//   console.log('listening on *:3000');
-// });
-/*
-// server
-require('net').createServer(function (socket) {
-    console.log("connected");
-
-    socket.on('data', function (data) {
-        console.log(data.toString());
-    });
-})
-
-.listen(8080);
-
-// client
-var s = require('net').Socket();
-s.connect(8080);
-s.emit({'a':3});
-s.end();
-*/
-
 var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+
+var cleanUp = function(){
+  console.log("Grafully killing")
+  server.close()  
+}
+process.on('uncaughtException', cleanUp);
+process.on('SIGTERM', cleanUp);
+process.on('exit', cleanUp);
+
 
 server.listen(80);
 
@@ -60,36 +19,80 @@ app.get('/', function (req, res) {
 
 var clientsSockets= {};
 var currentUsersIds = [];
+
 io.on('connection', function (socket) {
 
-  socket.emit('boop',{'data':'meow','Muerte':'bark'})
+  socket.on('connectToWorkout',function(rowerJSON){
+    // rowerJSON = socket;
+
+
+    // var workout = rower.workout;
+    // workout doesn't exist
+    // workout = {} or undefined
+    // workout = {ditance:20000,time:60*60}
+    // connect to existing workout
+    // workout = {id=123}
+
+    // add the workout if non-existing or get current workout
+    var rower = RowerController.getRower(rowerJSON,socket);
+
+    var workout = WorkoutController.getOrCreateWorkout(rower);
+
+    /*
+    if(listCurrentWorkouts[workout.id]==undefined):
+      listCurrentWorkouts[workout.id] = WorkoutUtil.createWorkout(workout);
+    workout = listCurrentWorkouts[workout.id];
+    */
+    // add rower to workout
+    workout.addRower(rower);
+
+  });
+
+  socket.on('ergData', function (ergData) {
+
+    console.log(ergData);
+    workout = WorkoutController.getWorkoutFromErg(ergData);
+    user = WorkoutController.getUserFromErg(ergData);
+    
+    // Broadcast to users the info we just got
+    workout.broadcastToPeers(user, ergData)
+    
+    // Save the data to the user
+    user.saveData(ergData)
+
+  });
+});
+
+  // socket.emit('boop',{'data':'meow','Muerte':'bark'})
 
   // console.log("python connected")
-  socket.emit('clientGretting', { hello: 'world' });
+  // socket.emit('clientGretting', { hello: 'world' });
+
+
+    // save to the DB
+    // console.log(currentUsersIds.length);
+    /*
+    for (var i = 0;i<currentUsersIds.length;i++){
+      var currentUserSocket = clientsSockets[currentUsersIds[i]];
+      currentUserSocket.emit('news', data);
+    }*/
+
+    // currentUser.
+
+  /*
   socket.on('clientId',function(data){
 
-  	console.log('got client id '+ data)
+    console.log('got client id '+ data)
     if(clientsSockets[data]===undefined)
       currentUsersIds.push(data);
 
-  	clientsSockets[data] = socket; 
+    clientsSockets[data] = socket; 
 
-  	// currentUser = socket;
+    // currentUser = socket;
 
   });
   /*
   socket.on('bbb',function(data){
-  	console.log(data);
+    console.log(data);
   });
 */
-  socket.on('ergData', function (data) {
-    console.log(data);
-    console.log(currentUsersIds.length);
-    for (var i = 0;i<currentUsersIds.length;i++){
-      var currentUserSocket = clientsSockets[currentUsersIds[i]];
-      currentUserSocket.emit('news', data);
-    }
-    // currentUser.
-  });
-});
-
