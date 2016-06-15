@@ -3,6 +3,7 @@ const expect = require('chai').expect;
 
 const Workout = require('../../src/models/Workout');
 const Rower = require('../../src/models/Rower');
+import {mockRower} from "../MockData";
 
 describe('Workout', function() {
   describe('#addRower', function() {
@@ -10,13 +11,22 @@ describe('Workout', function() {
 
     beforeEach(function () {
       workout = new Workout();
-      rower = new Rower({});
+      rower = mockRower;
+
     });
 
     it('adds a rower to the workout', function () {
-      expect(workout._rowers.length).to.equal(0);
+      expect( Object.keys(workout.getRowers()).length).to.equal(0);
       workout.addRower(rower);
-      expect(workout._rowers.length).to.equal(1);
+      expect(Object.keys(workout.getRowers()).length).to.equal(1);
+      var rowers = workout.getRowers();
+      expect(rowers[rower.id]).to.equal(rower);
+      // expect(Object.keys(rowers).indexOf(rower.id) > -1).to.equal(true);
     });
+   /* 
+    it('get a rower to the workout', function () {
+
+    });
+*/
   });
 });

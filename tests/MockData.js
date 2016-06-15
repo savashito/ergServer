@@ -1,5 +1,11 @@
-function getWorkout(){
+let mockRower = {
+	id: 69
+};
 
-}
+// function getWorkout(){
 
-module.exports.getWorkout = getWorkout;
+// }
+
+module.exports.mockRower = mockRower;
+//getWorkout = getWorkout;
+
