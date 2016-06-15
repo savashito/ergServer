@@ -1,3 +1,8 @@
-function Rower(){}
+class Rower {
+  // constructor(properties) {
+  //   this.properties = properties;
+  // }
 
-module.exports.Rower = Rower;
+}
+
+module.exports = Rower;
