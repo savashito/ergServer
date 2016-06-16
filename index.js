@@ -23,6 +23,13 @@ var currentUsersIds = [];
 io.on('connection', function (socket) {
 
   socket.on('connectToWorkout', function(rowerJSON){
+    var rower = RowerController.getRower(rowerJSON);
+    rower.setSocket(socket);
+    // add the workout if non-existing or get current workout
+    var workout = WorkoutController.getWorkout(rower);
+    workout.addRower(rower);
+    // Save workout changes to db
+    workout.save();
     // rowerJSON = socket;
 
 
@@ -33,10 +40,8 @@ io.on('connection', function (socket) {
     // connect to existing workout
     // workout = {id=123}
 
-    // add the workout if non-existing or get current workout
-    var rower = RowerController.getRower(rowerJSON, socket);
+    
 
-    var workout = WorkoutController.getWorkout(rower);
 
     /*
     if(listCurrentWorkouts[workout.id]==undefined):
@@ -44,22 +49,18 @@ io.on('connection', function (socket) {
     workout = listCurrentWorkouts[workout.id];
     */
     // add rower to workout
-    workout.addRower(rower);
+    
 
   });
 
   socket.on('ergData', function (ergData) {
-
     console.log(ergData);
     workout = WorkoutController.getWorkoutFromErg(ergData);
     user = WorkoutController.getUserFromErg(ergData);
-
     // Broadcast to users the info we just got
     workout.broadcastToPeers(user, ergData)
-
     // Save the data to the user
-    user.saveData(ergData)
-
+    user.saveErgData(ergData);
   });
 });
 

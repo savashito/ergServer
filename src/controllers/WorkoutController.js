@@ -8,6 +8,9 @@ class WorkoutController {
     }
     return new Workout();
   }
+  static getUserFromErg(ergDataJSON){
+
+  }
 }
 
 module.exports = WorkoutController;

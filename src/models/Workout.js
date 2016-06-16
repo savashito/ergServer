@@ -8,6 +8,16 @@ class Workout {
   getRowers(){
   	return this._rowers;
   }
+  broadcastToPeers(excludedRower,ergData){
+  	for (rower in this._rowers){
+  		if(rower.is(excludedRower)==false){
+  			rower.send(ergData);
+  		}
+  	}
+  }
+  save(){
+  	// save to db
+  }
 
 }
 

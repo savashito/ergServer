@@ -11,7 +11,7 @@ describe('Workout', function() {
 
     beforeEach(function () {
       workout = new Workout();
-      rower = mockRower;
+      rower = mockRower(69);
 
     });
 
@@ -21,12 +21,25 @@ describe('Workout', function() {
       expect(Object.keys(workout.getRowers()).length).to.equal(1);
       var rowers = workout.getRowers();
       expect(rowers[rower.id]).to.equal(rower);
-      // expect(Object.keys(rowers).indexOf(rower.id) > -1).to.equal(true);
     });
-   /* 
-    it('get a rower to the workout', function () {
+   
+    it('add multiple rowers to workout', function () {
+      var rower1 = mockRower(1);
+      var rower2 = mockRower(2);
+      var rower3 = mockRower(3);
+      workout.addRower(rower);
+      workout.addRower(rower1);
+      workout.addRower(rower2);
+      workout.addRower(rower3);
+      var rowers = workout.getRowers();
+      expect(rowers[rower.id]).to.equal(rower);
+      expect(rowers[rower1.id]).to.equal(rower1);
+      expect(rowers[rower2.id]).to.equal(rower2);
+      expect(rowers[rower3.id]).to.equal(rower3);
+    });
+    it('The workout should broadcast the message to tother rowers exudint the one sending it', function () {
+
 
     });
-*/
   });
 });

@@ -1,6 +1,9 @@
-let mockRower = {
-	id: 69
-};
+let mockRower = function(id){
+	return 	{
+				id: id,
+				name:'mock '+id
+			};
+}
 
 // function getWorkout(){
 
