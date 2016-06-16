@@ -6,11 +6,16 @@ class WorkoutController {
     if (!(rower instanceof Rower)){
       throw new TypeError();
     }
+    
     return new Workout();
+  }
+  static getWorkoutFromErg(ergDataJSON){
+
   }
   static getUserFromErg(ergDataJSON){
 
   }
+
 }
 
 module.exports = WorkoutController;
